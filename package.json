@@ -1,0 +1,53 @@
+{
+  "name": "media-king",
+  "version": "0.1.0",
+  "private": true,
+  "main": "main/index.js",
+  "scripts": {
+    "start": "next start",
+    "dev": "concurrently -k \"next dev\" \"electron .\"",
+    "build": "next build && next export  && electron-builder"
+  },
+  "build": {
+    "asar": true,
+    "productName": "影音王",
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/bin/${os}/${arch}/ffmpeg",
+      "node_modules/ffmpeg-static/index.js",
+      "node_modules/ffmpeg-static/package.json"
+    ],
+    "files": [
+      "main",
+      "out",
+      "icons/icons/**"
+    ],
+    "mac": {
+      "icon": "icons/mac/icon.icns"
+    },
+    "win": {
+      "icon": "icons/win/icon.ico"
+    }
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
+    "electron-is-dev": "^2.0.0",
+    "ffmpeg-static": "^4.4.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "material-ui-dropzone": "^3.5.0",
+    "next-electron-server": "^0.0.8",
+    "node-fetch": "^2.6.1",
+    "node-notifier": "^10.0.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.11",
+    "concurrently": "^6.2.0",
+    "electron": "^13.1.4",
+    "electron-builder": "^22.11.7",
+    "next": "11.0.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "typescript": "^4.3.4"
+  }
+}
