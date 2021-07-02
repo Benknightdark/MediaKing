@@ -122,6 +122,7 @@ export default function Youtube() {
                     <List className={classes.root}>
                       <ListItem>
                         <ListItemText
+                         className='quote'
                           primary="名稱"
                           secondary={data?.videoDetails?.title}
                         />
@@ -129,6 +130,7 @@ export default function Youtube() {
                       <Divider />
                       <ListItem>
                         <ListItemText
+                         className='quote'
                           primary="作者"
                           secondary={data?.videoDetails?.author}
                         />
@@ -136,6 +138,7 @@ export default function Youtube() {
                       <Divider />
                       <ListItem>
                         <ListItemText
+                         className='quote'
                           primary={
                             <img style={{
                               width: "100%",
@@ -155,6 +158,7 @@ export default function Youtube() {
 
                       <ListItem>
                         <ListItemText
+                        className='quote'
                           primary="關鍵字"
                           secondary={data?.videoDetails?.keywords?.join(",")}
                         />
@@ -163,6 +167,7 @@ export default function Youtube() {
 
                       <ListItem>
                         <ListItemText
+                         className='quote'
                           primary="平均評分"
                           secondary={data?.videoDetails?.averageRating}
                         />
@@ -171,6 +176,7 @@ export default function Youtube() {
 
                       <ListItem>
                         <ListItemText
+                         className='quote'
                           primary="關看人數"
                           secondary={data?.videoDetails?.viewCount}
                         />
@@ -179,6 +185,7 @@ export default function Youtube() {
 
                       <ListItem>
                         <ListItemText
+                         className='quote'
                           primary="影片時間"
                           secondary={new Date(
                             data?.videoDetails?.lengthSeconds * 1000
@@ -191,6 +198,7 @@ export default function Youtube() {
 
                       <ListItem>
                         <ListItemText
+                         className='quote'
                           primary="描述"
                           secondary={
                             <React.Fragment>
@@ -236,7 +244,7 @@ export default function Youtube() {
                                   display: 'inline',
                                   overflowWrap: 'break-word'
                                 }}
-                                primary={`${a.qualityLabel} - ${a.quality} - ${a.mimeType}`}
+                                primary={`${a.qualityLabel!=undefined?a.qualityLabel+" - ":''}${a.quality} - ${a.mimeType}`}
                               />
                               <ListItemSecondaryAction>
                                 <IconButton edge="end" aria-label="delete" onClick={
