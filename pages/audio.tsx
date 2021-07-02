@@ -68,6 +68,7 @@ export default function Audio() {
         onChange={handleChange}
         filesLimit={50}
         showPreviewsInDropzone={false}
+        maxFileSize={30000000000}
         dropzoneText={"拖曳你要轉換的音樂檔到此處"}
       />
       <Box p={2}>
@@ -108,6 +109,17 @@ export default function Audio() {
         }}
       >
         清除全部
+      </Button>
+
+      <Button
+        className={classes.btnMargin}
+        variant="contained"
+        color="default"
+        onClick={async () => {
+          nWindow.electron.openAudioConvertFolderFromClient.send();
+        }}
+      >
+        開啟轉檔資料夾
       </Button>
       <Box p={1}></Box>
       {files.length > 0 && (

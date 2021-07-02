@@ -141,7 +141,6 @@ const convertAudio = async (data) => {
         });
         a.status='done';
         mainWindow.send('audioConvertFromServer', a);
-        await shell.openPath(`${folderName}`)
       })
       .on('error', function (err) {
         notifier.notify({
@@ -161,4 +160,11 @@ ipcMain.on('audioConvertFromClient', async (event, data) => {
   } catch (error) {
     console.log(error)
   }
+})
+
+ipcMain.on('openAudioConvertFolderFromClient',async()=>{
+  let folderName = `${app.getPath('home')}/AudioConvert`
+  !fs.existsSync(`${folderName}`) && fs.mkdirSync(`${folderName}`, { recursive: true });
+  await shell.openPath(`${folderName}`)
+
 })

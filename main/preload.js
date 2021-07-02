@@ -1,6 +1,11 @@
 const { ipcRenderer, contextBridge } = require("electron");
 
 contextBridge.exposeInMainWorld("electron", {
+  openAudioConvertFolderFromClient: {
+    send: () => ipcRenderer.send("openAudioConvertFolderFromClient"),
+    on: (handler) => ipcRenderer.on("openAudioConvertFolderFromClient", handler),
+    off: (chanelName = null) => ipcRenderer.removeAllListeners("openAudioConvertFolderFromClient")
+  },
   audioConvertFromServer: {
     send: (data) => ipcRenderer.send("audioConvertFromServer", data),
     on: (handler) => ipcRenderer.on("audioConvertFromServer", handler),
