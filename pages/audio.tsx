@@ -109,10 +109,10 @@ export default function Audio() {
       >
         清除全部
       </Button>
-      <Box p={2}></Box>
+      <Box p={1}></Box>
       {files.length > 0 && (
         <Accordion defaultExpanded>
-          <AccordionSummary
+          <AccordionSummary className="gradient-green"
             expandIcon={<ExpandMoreIcon />}
             aria-controls="panel1a-content"
             id="panel1a-header"
@@ -124,7 +124,7 @@ export default function Audio() {
               {files.map((a, index) => {
                 return (
                   <div>
-                    <ListItem key={index}>
+                    <ListItem key={index} className="gradient-blue">
                       {a?.status === "converting" && <CircularProgress />}
                       {a?.status === "done" && (
                         <ListItemIcon>
@@ -145,7 +145,8 @@ export default function Audio() {
                       </ListItemSecondaryAction>
                       <ListItemText primary={a.name} />
                     </ListItem>
-                    <Divider></Divider>
+                   <Box p={2}>
+                   </Box>
                   </div>
                 );
               })}
