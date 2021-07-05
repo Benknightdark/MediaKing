@@ -55,7 +55,7 @@ export default function Audio() {
     const handleAudioConvertFromServer = async (event, data) => {
       let newFiles = files.filter((a) => a.path != data.path);
       console.log(newFiles);
-      newFiles = [...newFiles, data];
+      newFiles = [data,...newFiles];
       await setFiles([]);
       await setFiles(newFiles);
     };

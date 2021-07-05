@@ -12,6 +12,9 @@ const fs = require('fs');
 const fetch = require('node-fetch')
 const serveNext = require("next-electron-server");
 const isDev = require('electron-is-dev');
+const events = require('events');
+const em = new events.EventEmitter();
+//Subscribe for FirstEvent
 
 let mainWindow
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -26,7 +29,7 @@ app.on("ready", async () => {
     },
   });
   if (isDev) {
-  mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
   }
   mainWindow.maximize();
   mainWindow.loadURL("next://app");
@@ -124,47 +127,55 @@ ipcMain.on('ytInfoFromClient', async (event, url) => {
   }
 })
 
-const convertAudio = async (data) => {
-  console.log(data)
+const convertAudio = async (a, allData, nextIndex) => {
   let folderName = `${app.getPath('home')}/AudioConvert`
   !fs.existsSync(`${folderName}`) && fs.mkdirSync(`${folderName}`, { recursive: true })
-  for (const a of data) {
-    console.log(a)
-    const outputPath = folderName+"/"+a.name.split('.')[0] + '.mp3';
-    ffmpeg({ source: a.path, nolog: true })
-      .toFormat('mp3')
-      .on('end', async function () {
-        console.log('file has been converted successfully');
-        notifier.notify({
-          title: a.name,
-          message: `✔️✔️儲存路徑 => ${outputPath}`
-        });
-        a.status='done';
-        mainWindow.send('audioConvertFromServer', a);
-      })
-      .on('error', function (err) {
-        notifier.notify({
-          title: 'an error happened: ',
-          message: `err.message`
-        });
-        console.log('an error happened: ' + err.message);
-      })
-      .saveToFile(outputPath);
-  }
-}
+  console.log(a)
+  const outputPath = folderName + "/" + a.name.split('.')[0] + '.mp3';
+  ffmpeg({ source: a.path, nolog: true })
+    .toFormat('mp3')
+    .on('end', async function () {
+      console.log('file has been converted successfully');
+      notifier.notify({
+        title: a.name,
+        message: `✔️✔️儲存路徑 => ${outputPath}`
+      });
+      a.status = 'done';
+      em.emit('ConvertAudio', allData[nextIndex], allData, nextIndex + 1);
 
-// 取得YotubeTube影片資訊
+      mainWindow.send('audioConvertFromServer', a);
+    })
+    .on('error', function (err) {
+      notifier.notify({
+        title: 'an error happened: ',
+        message: `err.message`
+      });
+      console.log('an error happened: ' + err.message);
+    })
+    .saveToFile(outputPath);
+
+}
+em.on('ConvertAudio', async function (currentData, allData, nextIndex) {
+  //if(allData.length!==nextIndex){
+  try {
+    await convertAudio(currentData, allData, nextIndex)
+
+  } catch (error) {
+    console.log(error)
+  }
+  // }
+});
+// 取得訊
 ipcMain.on('audioConvertFromClient', async (event, data) => {
   try {
-   await convertAudio(data)
+    await convertAudio(data[0], data, 1)
   } catch (error) {
     console.log(error)
   }
 })
 
-ipcMain.on('openAudioConvertFolderFromClient',async()=>{
+ipcMain.on('openAudioConvertFolderFromClient', async () => {
   let folderName = `${app.getPath('home')}/AudioConvert`
   !fs.existsSync(`${folderName}`) && fs.mkdirSync(`${folderName}`, { recursive: true });
   await shell.openPath(`${folderName}`)
-
 })
