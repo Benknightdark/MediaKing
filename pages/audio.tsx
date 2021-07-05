@@ -71,6 +71,7 @@ export default function Audio() {
         onChange={handleChange}
         filesLimit={50}
         showPreviewsInDropzone={true}
+        useChipsForPreview={true}
         maxFileSize={30000000000}
         dropzoneText={"拖曳你要轉換的音樂檔到此處"}
         clearOnUnmount={true}
