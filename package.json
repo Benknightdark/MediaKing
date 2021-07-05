@@ -39,6 +39,7 @@
     "node-fetch": "^2.6.1",
     "node-notifier": "^10.0.0",
     "notistack": "^1.0.9",
+    "use-debounce": "^7.0.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

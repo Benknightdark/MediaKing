@@ -18,6 +18,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Typography from "@material-ui/core/Typography";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,6 +37,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Audio() {
   const classes = useStyles();
+  const router = useRouter()
+
   const nWindow = global.window as any;
   const initArray = [];
   const [files, setFiles] = useState(initArray);
@@ -67,9 +70,11 @@ export default function Audio() {
       <DropzoneArea
         onChange={handleChange}
         filesLimit={50}
-        showPreviewsInDropzone={false}
+        showPreviewsInDropzone={true}
         maxFileSize={30000000000}
         dropzoneText={"拖曳你要轉換的音樂檔到此處"}
+        clearOnUnmount={true}
+        showFileNames={true}
       />
       <Box p={2}>
         <Divider />
@@ -106,6 +111,7 @@ export default function Audio() {
         color="secondary"
         onClick={async () => {
           await setFiles([]);
+          router.reload();
         }}
       >
         清除全部
@@ -143,7 +149,7 @@ export default function Audio() {
                           <DoneIcon />
                         </ListItemIcon>
                       )}
-                      <ListItemSecondaryAction>
+                      {/* <ListItemSecondaryAction>
                         <IconButton
                           edge="start"
                           aria-label="delete"
@@ -154,11 +160,11 @@ export default function Audio() {
                         >
                           <HighlightOffIcon />
                         </IconButton>
-                      </ListItemSecondaryAction>
+                      </ListItemSecondaryAction> */}
                       <ListItemText primary={a.name} />
                     </ListItem>
-                   <Box p={2}>
-                   </Box>
+                    <Box p={2}>
+                    </Box>
                   </div>
                 );
               })}
