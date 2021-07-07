@@ -28,9 +28,9 @@ app.on("ready", async () => {
       preload: join(__dirname, "preload.js"),
     },
   });
-  if (isDev) {
+  //if (isDev) {
     mainWindow.webContents.openDevTools()
-  }
+ // }
   mainWindow.maximize();
   mainWindow.loadURL("next://app");
 });
@@ -204,13 +204,19 @@ ipcMain.on('openAudioConvertFolderFromClient', async () => {
   await shell.openPath(`${folderName}`)
 })
 
-ipcMain.on('ytHotFromClient', async (event, data) => {
-  try {
-   const ytHotData=await getYoutubeHotData();
-   mainWindow.send('ytHotFromServer', ytHotData)
-   return ytHotData;
-  } catch (error) {
-    console.log(error)
-    return null;
-  }
+// ipcMain.on('ytHotFromClient', async (event, data) => {
+//   try {
+//    const ytHotData=await getYoutubeHotData();
+//    mainWindow.send('ytHotFromServer', ytHotData)
+//    return ytHotData;
+//   } catch (error) {
+//     console.log(error)
+//     return null;
+//   }
+// })
+
+ipcMain.on('ytHotFromClient', async (event) => {
+  const ytHotData=await getYoutubeHotData();
+  mainWindow.send('ytHotFromClient', ytHotData)
+
 })
