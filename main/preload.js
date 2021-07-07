@@ -36,4 +36,14 @@ contextBridge.exposeInMainWorld("electron", {
     on: (handler) => ipcRenderer.on("ytInfoFromServer", handler),
     off: (chanelName = null) => ipcRenderer.removeAllListeners("ytInfoFromServer"),
   },
+  ytHotFromClient: {
+    send: () => ipcRenderer.send("ytHotFromClient"),
+    on: (handler) => ipcRenderer.on("ytHotFromClient", handler),
+    off: (chanelName = null) => ipcRenderer.removeAllListeners("ytHotFromClient"),
+  },
+  ytHotFromServer: {
+    send: (payload) => ipcRenderer.send("ytHotFromServer", payload),
+    on: (handler) => ipcRenderer.on("ytHotFromServer", handler),
+    off: (chanelName = null) => ipcRenderer.removeAllListeners("ytHotFromServer"),
+  },
 });

@@ -46,6 +46,27 @@ async function getInfo(url) {
     return JSON.parse(m[1])
   } else return {}
 }
+
+async function getYoutubeHotData() {
+  const req = await fetch('https://www.youtube.com/feed/explore')
+  const res = await req.text();
+  const regex = /var ytInitialData = (.+);<\/script>/gm
+  const m = regex.exec(res)
+  return JSON.parse(m[1].split(';</script>')[0])['contents']['twoColumnBrowseResultsRenderer']['tabs'][0]['tabRenderer']['content']['sectionListRenderer']['contents'][2]['itemSectionRenderer']['contents'][0]['shelfRenderer']['content']['expandedShelfContentsRenderer']['items'].map(b => b.videoRenderer)
+    .map(c => {
+      return {
+        'videoId': c.videoId,
+        'publishedTimeText': c.publishedTimeText.simpleText,
+        'viewCountText': c.viewCountText.simpleText,
+        'lengthText': c.lengthText.simpleText,
+        'shortViewCountText': c.shortViewCountText.simpleText,
+        'title': c.title.runs[0].text,
+        'descriptionSnippet': c.descriptionSnippet.runs[0].text,
+        'thumbnail':c.thumbnail.thumbnails[c.thumbnail.thumbnails.length-1].url
+      }
+    })
+}
+
 const ytDownload = async (url, downloadType, sourcUrl, videoLength) => {
   const id = uuidv4();
   let folderName = `${app.getPath('home')}/YoutubeDownload`
@@ -107,6 +128,7 @@ const ytDownload = async (url, downloadType, sourcUrl, videoLength) => {
       break;
   }
 }
+
 // 下載Youtube影片和音樂
 ipcMain.on('ytDownloadFromClient', async (event, url, downloadType, sourcUrl, videoLength) => {
   try {
@@ -117,6 +139,7 @@ ipcMain.on('ytDownloadFromClient', async (event, url, downloadType, sourcUrl, vi
     console.log(error)
   }
 })
+
 // 取得YotubeTube影片資訊
 ipcMain.on('ytInfoFromClient', async (event, url) => {
   try {
@@ -155,6 +178,7 @@ const convertAudio = async (a, allData, nextIndex) => {
     .saveToFile(outputPath);
 
 }
+
 em.on('ConvertAudio', async function (currentData, allData, nextIndex) {
   //if(allData.length!==nextIndex){
   try {
@@ -165,7 +189,7 @@ em.on('ConvertAudio', async function (currentData, allData, nextIndex) {
   }
   // }
 });
-// 取得訊
+
 ipcMain.on('audioConvertFromClient', async (event, data) => {
   try {
     await convertAudio(data[0], data, 1)
@@ -178,4 +202,15 @@ ipcMain.on('openAudioConvertFolderFromClient', async () => {
   let folderName = `${app.getPath('home')}/AudioConvert`
   !fs.existsSync(`${folderName}`) && fs.mkdirSync(`${folderName}`, { recursive: true });
   await shell.openPath(`${folderName}`)
+})
+
+ipcMain.on('ytHotFromClient', async (event, data) => {
+  try {
+   const ytHotData=await getYoutubeHotData();
+   mainWindow.send('ytHotFromServer', ytHotData)
+   return ytHotData;
+  } catch (error) {
+    console.log(error)
+    return null;
+  }
 })
