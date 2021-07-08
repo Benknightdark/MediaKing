@@ -30,19 +30,21 @@ export default function Home() {
   const nWindow = global.window as any;
   const [data, setData] = useState([]);
   const classes = useStyles();
-
+const getData=()=>{
+      nWindow.electron.ytHotFromClient.send();
+    const handleYTHotFromServer = (event, dataFromServer) => {
+      console.log(dataFromServer)
+      setData(dataFromServer)
+      nWindow.electron.ytHotFromClient.off();
+    };   
+    nWindow.electron.ytHotFromClient.on(handleYTHotFromServer);
+    return () => {
+      nWindow.electron.ytHotFromClient.off();
+    };
+}
   useEffect(() => {
-    // nWindow.electron.ytHotFromClient.send();
-    // const handleYTHotFromServer = (event, dataFromServer) => {
-    //   console.log(dataFromServer)
-    //   setData(dataFromServer)
-    //   nWindow.electron.ytHotFromClient.off();
-    // };   
-    // nWindow.electron.ytHotFromClient.on(handleYTHotFromServer);
-    // return () => {
-    //   nWindow.electron.ytHotFromClient.off();
-    // };
-  },[data,setData]);
+    getData();
+  },[]);
 
   return (
     data.length > 0 && <div className={classes.root}>
