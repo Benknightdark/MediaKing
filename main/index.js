@@ -180,14 +180,14 @@ const convertAudio = async (a, allData, nextIndex) => {
 }
 
 em.on('ConvertAudio', async function (currentData, allData, nextIndex) {
-  //if(allData.length!==nextIndex){
+  if(allData.length!==nextIndex){
   try {
     await convertAudio(currentData, allData, nextIndex)
 
   } catch (error) {
     console.log(error)
   }
-  // }
+  }
 });
 
 ipcMain.on('audioConvertFromClient', async (event, data) => {
@@ -204,19 +204,9 @@ ipcMain.on('openAudioConvertFolderFromClient', async () => {
   await shell.openPath(`${folderName}`)
 })
 
-// ipcMain.on('ytHotFromClient', async (event, data) => {
-//   try {
-//    const ytHotData=await getYoutubeHotData();
-//    mainWindow.send('ytHotFromServer', ytHotData)
-//    return ytHotData;
-//   } catch (error) {
-//     console.log(error)
-//     return null;
-//   }
-// })
+
 
 ipcMain.on('ytHotFromClient', async (event) => {
   const ytHotData=await getYoutubeHotData();
   mainWindow.send('ytHotFromClient', ytHotData)
-
 })

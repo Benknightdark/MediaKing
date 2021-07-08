@@ -18,6 +18,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Accordion from "@material-ui/core/Accordion";
 import { useSnackbar } from "notistack";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,14 +58,19 @@ export default function Youtube() {
   const [progress, setProgress] = React.useState(0);
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
+  const router=useRouter();
   useEffect(() => {
+    console.log()
+    if(router.query?.videoId!==undefined){
+      const url=`https://www.youtube.com/watch?v=${router.query?.videoId}`;
+      setSourceUrl(url)
+      setProgress(0);
+      nWindow.electron.ytInfoFromClient.send(url);
+    }
     const handleYTInfoFromServer = (event, dataFromServer) => {
       setData(dataFromServer);
     };
     const handleYTDownloadFromServer = (event, progress, videoLength) => {
-      // console.log(progress)
-      // console.log(videoLength)
       if (progress.percent !== undefined) {
         setProgress(progress.percent);
       } else {
@@ -84,13 +90,13 @@ export default function Youtube() {
     };
   }, []);
   return (
-
     <div className={classes.root}>
       <TextField
         id="filled-full-width"
         label="Youtube影片連結"
         style={{ margin: 8 }}
         helperText="輸入Youtube影片連結"
+        value={sourceUrl}
         fullWidth
         margin="normal"
         InputLabelProps={{
@@ -104,7 +110,6 @@ export default function Youtube() {
         }}
       />
       <LinearProgressWithLabel value={progress} />
-
       {data?.videoDetails?.author && (
         <div>
           <Grid container spacing={3}>
@@ -154,8 +159,6 @@ export default function Youtube() {
                         />
                       </ListItem>
                       <Divider />
-
-
                       <ListItem>
                         <ListItemText
                         className='quote'
@@ -164,7 +167,6 @@ export default function Youtube() {
                         />
                       </ListItem>
                       <Divider />
-
                       <ListItem>
                         <ListItemText
                          className='quote'
@@ -173,7 +175,6 @@ export default function Youtube() {
                         />
                       </ListItem>
                       <Divider />
-
                       <ListItem>
                         <ListItemText
                          className='quote'
@@ -182,7 +183,6 @@ export default function Youtube() {
                         />
                       </ListItem>
                       <Divider />
-
                       <ListItem>
                         <ListItemText
                          className='quote'
@@ -195,7 +195,6 @@ export default function Youtube() {
                         />
                       </ListItem>
                       <Divider />
-
                       <ListItem>
                         <ListItemText
                          className='quote'
@@ -274,7 +273,6 @@ export default function Youtube() {
         </div>
       )}
     </div>
-
   );
 }
 
