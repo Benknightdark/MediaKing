@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
 import ImageListItemBar from '@material-ui/core/ImageListItemBar';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import { useRouter } from "next/router";
@@ -52,7 +51,6 @@ export default function Home() {
   return (
     data.length > 0 && <div className={classes.root}>
       <ImageList>
-
         {data.map((item) => (
           <ImageListItem key={item.thumbnail}>
             <img src={item.thumbnail} alt={item.title} />
