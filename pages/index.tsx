@@ -32,16 +32,16 @@ export default function Home() {
   const classes = useStyles();
 
   useEffect(() => {
-    nWindow.electron.ytHotFromClient.send();
-    const handleYTHotFromServer = (event, dataFromServer) => {
-      console.log(dataFromServer)
-      setData(dataFromServer)
-      nWindow.electron.ytHotFromClient.off();
-    };   
-    nWindow.electron.ytHotFromClient.on(handleYTHotFromServer);
-    return () => {
-      nWindow.electron.ytHotFromClient.off();
-    };
+    // nWindow.electron.ytHotFromClient.send();
+    // const handleYTHotFromServer = (event, dataFromServer) => {
+    //   console.log(dataFromServer)
+    //   setData(dataFromServer)
+    //   nWindow.electron.ytHotFromClient.off();
+    // };   
+    // nWindow.electron.ytHotFromClient.on(handleYTHotFromServer);
+    // return () => {
+    //   nWindow.electron.ytHotFromClient.off();
+    // };
   },[data,setData]);
 
   return (
