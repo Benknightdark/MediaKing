@@ -36,6 +36,7 @@ export default function Home() {
     const handleYTHotFromServer = (event, dataFromServer) => {
       console.log(dataFromServer)
       setData(dataFromServer)
+      nWindow.electron.ytHotFromClient.off();
     };   
     nWindow.electron.ytHotFromClient.on(handleYTHotFromServer);
     return () => {
