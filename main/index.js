@@ -28,9 +28,9 @@ app.on("ready", async () => {
       preload: join(__dirname, "preload.js"),
     },
   });
-if (isDev) {
+//if (isDev) {
     mainWindow.webContents.openDevTools()
-  }
+ // }
   mainWindow.maximize();
   mainWindow.loadURL("next://app");
 });
