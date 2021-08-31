@@ -4,7 +4,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import {  useRouter } from "next/router";
+import { useRouter } from "next/router";
 import React from "react";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -16,6 +16,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { Hidden, IconButton, useTheme } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import MovieIcon from "@material-ui/icons/Movie";
+import YoutubePlayerProvider from "./yt-player";
 const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -100,65 +101,67 @@ export default function CustomLayout({ children }) {
   };
 
   return (
-    <div className={classes.root}>
-      <CustomHeader />
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              router.push("/");
+    <YoutubePlayerProvider>
+      <div className={classes.root}>
+        <CustomHeader />
+        <CssBaseline />
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              noWrap
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                router.push("/");
+              }}
+            >
+              影音王
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        {/* For Desktop Menu Drawer */}
+        <Hidden xsDown implementation="css">
+          <Drawer
+            className={classes.drawer}
+            variant="permanent"
+            classes={{
+              paper: classes.drawerPaper,
             }}
           >
-            影音王
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      {/* For Desktop Menu Drawer */}
-      <Hidden xsDown implementation="css">
-        <Drawer
-          className={classes.drawer}
-          variant="permanent"
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <MenuList classes={classes} router={router}></MenuList>
-        </Drawer>
-      </Hidden>
-      {/* For Mobile Menu Drawer */}
-      <Hidden smUp implementation="css">
-        <Drawer
-          variant="temporary"
-          anchor={theme.direction === "rtl" ? "right" : "left"}
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-        >
-          <MenuList classes={classes} router={router}></MenuList>
-        </Drawer>
-      </Hidden>
-      <main className={classes.content}>
-        <Toolbar />
-        <Container maxWidth="xl">{children}</Container>
-      </main>
-    </div>
+            <MenuList classes={classes} router={router}></MenuList>
+          </Drawer>
+        </Hidden>
+        {/* For Mobile Menu Drawer */}
+        <Hidden smUp implementation="css">
+          <Drawer
+            variant="temporary"
+            anchor={theme.direction === "rtl" ? "right" : "left"}
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+          >
+            <MenuList classes={classes} router={router}></MenuList>
+          </Drawer>
+        </Hidden>
+        <main className={classes.content}>
+          <Toolbar />
+          <Container maxWidth="xl">{children}</Container>
+        </main>
+      </div>
+    </YoutubePlayerProvider>
   );
 }

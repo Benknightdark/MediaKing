@@ -6,6 +6,7 @@ import ImageListItemBar from '@material-ui/core/ImageListItemBar';
 import IconButton from '@material-ui/core/IconButton';
 import InfoIcon from '@material-ui/icons/Info';
 import { useRouter } from "next/router";
+import { useYoutubePlayer } from "./components/yt-player";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -30,8 +31,9 @@ export default function Home() {
   const nWindow = global.window as any;
   const [data, setData] = useState([]);
   const classes = useStyles();
-  const router=useRouter();
-  
+  const router = useRouter();
+  const { openYoutubePlayer } = useYoutubePlayer();
+
   const getData = () => {
     nWindow.electron.ytHotFromClient.send();
     const handleYTHotFromServer = (event, dataFromServer) => {
@@ -59,10 +61,10 @@ export default function Home() {
               subtitle={<span>{item.descriptionSnippet}</span>}
               actionIcon={
                 <IconButton aria-label={`info about ${item.title}`} className={classes.icon}
-                onClick={()=>{
-                  console.log(item.videoId)
-                  router.push(`/youtube?videoId=${item.videoId}`)
-                }}
+                  onClick={() => {
+                    openYoutubePlayer(item.videoId)
+                    // router.push(`/youtube?videoId=${item.videoId}`)
+                  }}
                 >
                   <InfoIcon />
                 </IconButton>
