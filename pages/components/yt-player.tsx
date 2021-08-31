@@ -1,7 +1,7 @@
 import Modal from "@material-ui/core/Modal";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import React, { createContext, useContext, useState } from "react";
-import YouTube from "react-youtube";
+import YouTube, { Options } from "react-youtube";
 
 type YoutubePlayerContextActions = {
     openYoutubePlayer: (id: string) => void;
@@ -29,20 +29,37 @@ export default function YoutubePlayerProvider({
     const [open, setOpen] = useState<boolean>(false);
     const [id, setId] = useState<string>("");
     const classes = useStyles();
-
+    const [videoList,setVideoList]=useState({});
+    const [opts,setOpts]=useState<Options>({});
+   
     const show = (text: string) => {
+        console.log(videoList[text])
         setId(text);
-        setOpen(true);
+        console.log(videoList[text]!==null?videoList[text]:0)
+        setOpts({
+            playerVars: {
+                autoplay: 1 as const,
+                origin: '*',
+                start:Number.parseInt(videoList[text])
+            },
+        })
+        console.log(opts)
+        setTimeout(() => {
+            setOpen(true);
+        }, 500);
     };
 
     const handleClose = () => {
-        setOpen(false);
+        try {
+            document.getElementsByTagName('iframe')[0].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
+            setTimeout(() => {
+                setOpen(false);
+            }, 500);
+        } catch (error) {
+            console.log(error)
+        }
     };
-    const opts = {
-        playerVars: {
-            autoplay: 1 as const,
-        },
-    };
+
     return (
         <YoutubePlayerContext.Provider value={{ openYoutubePlayer: show }}>
             <Modal
@@ -51,23 +68,23 @@ export default function YoutubePlayerProvider({
                 onClose={handleClose}
             >
                 <div className={classes.paper}>
-                    <YouTube
+                    <YouTube                     
                         videoId={id}
                         id={id}
                         opts={opts}
-                        onError={(event) => { console.log("onError") }}
-                        onPause={(event) => { console.log("onPause") }}
-                        onPlay={(event) => {
-                            const cc=setInterval(() => {
-                                console.log(event.target.getCurrentTime())
-                            }, 100);
-                            clearInterval(cc)
-                        
+                        onError={(event) => {  }}
+                        onPause={(event) => {
+                            console.log("onPause");                         
+                            setVideoList( (prevState) => ({
+                                ...prevState,
+                                [id]: event.target.getCurrentTime()
+                             }))
                         }}
-                        onReady={(event) => { console.log("onReady") }}
-                        onEnd={(event) => { console.log("onEnd") }}
-                        onStateChange={(event) => { console.log("onStateChange") }}
-                        onPlaybackRateChange={(event) => { console.log("onPlaybackRateChange") }}
+                        onPlay={(event) => {  }}
+                        onReady={(event) => { }}
+                        onEnd={(event) => { }}
+                        onStateChange={(event) => {  }}
+                        onPlaybackRateChange={(event) => {  }}
                     />
                 </div>
             </Modal>
