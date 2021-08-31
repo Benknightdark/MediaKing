@@ -29,21 +29,18 @@ export default function YoutubePlayerProvider({
     const [open, setOpen] = useState<boolean>(false);
     const [id, setId] = useState<string>("");
     const classes = useStyles();
-    const [videoList,setVideoList]=useState({});
-    const [opts,setOpts]=useState<Options>({});
-   
+    const [videoList, setVideoList] = useState({ });
+    const [opts, setOpts] = useState<Options>({ });
+
     const show = (text: string) => {
-        console.log(videoList[text])
         setId(text);
-        console.log(videoList[text]!==null?videoList[text]:0)
         setOpts({
             playerVars: {
                 autoplay: 1 as const,
                 origin: '*',
-                start:Number.parseInt(videoList[text])
+                start: Number.parseInt(videoList[text])
             },
         })
-        console.log(opts)
         setTimeout(() => {
             setOpen(true);
         }, 500);
@@ -68,23 +65,29 @@ export default function YoutubePlayerProvider({
                 onClose={handleClose}
             >
                 <div className={classes.paper}>
-                    <YouTube                     
+                    <YouTube
                         videoId={id}
                         id={id}
                         opts={opts}
-                        onError={(event) => {  }}
+                        onError={(event) => { }}
                         onPause={(event) => {
-                            console.log("onPause");                         
-                            setVideoList( (prevState) => ({
+                            setVideoList((prevState) => ({
                                 ...prevState,
                                 [id]: event.target.getCurrentTime()
-                             }))
+                            }))
                         }}
-                        onPlay={(event) => {  }}
+                        onPlay={(event) => { }}
                         onReady={(event) => { }}
-                        onEnd={(event) => { }}
-                        onStateChange={(event) => {  }}
-                        onPlaybackRateChange={(event) => {  }}
+                        onStateChange={(event) => {
+                            // 判斷影片是否播放完畢，如果已播放完畢，則將該影片的開始時間設為0
+                            if (event.data === 0) {
+                                setVideoList((prevState) => ({
+                                    ...prevState,
+                                    [id]: 0
+                                }))
+                            }
+                        }}
+                        onPlaybackRateChange={(event) => { }}
                     />
                 </div>
             </Modal>
