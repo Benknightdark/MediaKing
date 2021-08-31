@@ -38,23 +38,36 @@ export default function YoutubePlayerProvider({
     const handleClose = () => {
         setOpen(false);
     };
-    const opts = {     
+    const opts = {
         playerVars: {
-          autoplay: 1 as const,
+            autoplay: 1 as const,
         },
-      };
+    };
     return (
         <YoutubePlayerContext.Provider value={{ openYoutubePlayer: show }}>
             <Modal
                 className={classes.modal}
                 open={open}
-                onClose={handleClose}               
+                onClose={handleClose}
             >
                 <div className={classes.paper}>
                     <YouTube
                         videoId={id}
                         id={id}
-                        opts = {opts}
+                        opts={opts}
+                        onError={(event) => { console.log("onError") }}
+                        onPause={(event) => { console.log("onPause") }}
+                        onPlay={(event) => {
+                            const cc=setInterval(() => {
+                                console.log(event.target.getCurrentTime())
+                            }, 100);
+                            clearInterval(cc)
+                        
+                        }}
+                        onReady={(event) => { console.log("onReady") }}
+                        onEnd={(event) => { console.log("onEnd") }}
+                        onStateChange={(event) => { console.log("onStateChange") }}
+                        onPlaybackRateChange={(event) => { console.log("onPlaybackRateChange") }}
                     />
                 </div>
             </Modal>

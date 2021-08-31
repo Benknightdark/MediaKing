@@ -19,6 +19,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Accordion from "@material-ui/core/Accordion";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
+import { useYoutubePlayer } from "./components/yt-player";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,16 +54,17 @@ function LinearProgressWithLabel(props: LinearProgressProps & { value: number })
 }
 export default function Youtube() {
   const nWindow = global.window as any;
-  const [data, setData] = useState({} as any);
+  const [data, setData] = useState({ } as any);
   const [sourceUrl, setSourceUrl] = useState('');
   const [progress, setProgress] = React.useState(0);
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const router=useRouter();
+  const router = useRouter();
+  const { openYoutubePlayer } = useYoutubePlayer();
+
   useEffect(() => {
-    console.log()
-    if(router.query?.videoId!==undefined){
-      const url=`https://www.youtube.com/watch?v=${router.query?.videoId}`;
+    if (router.query?.videoId !== undefined) {
+      const url = `https://www.youtube.com/watch?v=${router.query?.videoId}`;
       setSourceUrl(url)
       setProgress(0);
       nWindow.electron.ytInfoFromClient.send(url);
@@ -127,7 +129,7 @@ export default function Youtube() {
                     <List className={classes.root}>
                       <ListItem>
                         <ListItemText
-                         className='quote'
+                          className='quote'
                           primary="名稱"
                           secondary={data?.videoDetails?.title}
                         />
@@ -135,7 +137,7 @@ export default function Youtube() {
                       <Divider />
                       <ListItem>
                         <ListItemText
-                         className='quote'
+                          className='quote'
                           primary="作者"
                           secondary={data?.videoDetails?.author}
                         />
@@ -143,7 +145,7 @@ export default function Youtube() {
                       <Divider />
                       <ListItem>
                         <ListItemText
-                         className='quote'
+                          className='quote'
                           primary={
                             <img style={{
                               width: "100%",
@@ -154,6 +156,7 @@ export default function Youtube() {
                                 data?.videoDetails?.thumbnail.thumbnails.length - 1
                                 ]["url"]
                               }
+                              onClick={() => {openYoutubePlayer(data?.videoDetails?.videoId) }}
                             />
                           }
                         />
@@ -161,7 +164,7 @@ export default function Youtube() {
                       <Divider />
                       <ListItem>
                         <ListItemText
-                        className='quote'
+                          className='quote'
                           primary="關鍵字"
                           secondary={data?.videoDetails?.keywords?.join(",")}
                         />
@@ -169,7 +172,7 @@ export default function Youtube() {
                       <Divider />
                       <ListItem>
                         <ListItemText
-                         className='quote'
+                          className='quote'
                           primary="平均評分"
                           secondary={data?.videoDetails?.averageRating}
                         />
@@ -177,7 +180,7 @@ export default function Youtube() {
                       <Divider />
                       <ListItem>
                         <ListItemText
-                         className='quote'
+                          className='quote'
                           primary="關看人數"
                           secondary={data?.videoDetails?.viewCount}
                         />
@@ -185,7 +188,7 @@ export default function Youtube() {
                       <Divider />
                       <ListItem>
                         <ListItemText
-                         className='quote'
+                          className='quote'
                           primary="影片時間"
                           secondary={new Date(
                             data?.videoDetails?.lengthSeconds * 1000
@@ -197,7 +200,7 @@ export default function Youtube() {
                       <Divider />
                       <ListItem>
                         <ListItemText
-                         className='quote'
+                          className='quote'
                           primary="描述"
                           secondary={
                             <React.Fragment>
@@ -243,7 +246,7 @@ export default function Youtube() {
                                   display: 'inline',
                                   overflowWrap: 'break-word'
                                 }}
-                                primary={`${a.qualityLabel!=undefined?a.qualityLabel+" - ":''}${a.quality} - ${a.mimeType}`}
+                                primary={`${a.qualityLabel != undefined ? a.qualityLabel + " - " : ''}${a.quality} - ${a.mimeType}`}
                               />
                               <ListItemSecondaryAction>
                                 <IconButton edge="end" aria-label="delete" onClick={
@@ -251,9 +254,9 @@ export default function Youtube() {
                                     const dataType = a.mimeType.indexOf('video') != -1 ? 'video' : 'audio'
                                     nWindow.electron.ytDownloadFromClient.send(a.url, dataType, sourceUrl,
                                       data?.videoDetails?.lengthSeconds);
-                                      enqueueSnackbar('開始下載，請稍後',{
-                                        autoHideDuration:5000
-                                      });
+                                    enqueueSnackbar('開始下載，請稍後', {
+                                      autoHideDuration: 5000
+                                    });
                                   }
                                 }>
                                   <GetAppIcon />

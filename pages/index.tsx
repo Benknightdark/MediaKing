@@ -55,15 +55,17 @@ export default function Home() {
       <ImageList>
         {data.map((item) => (
           <ImageListItem key={item.thumbnail}>
-            <img src={item.thumbnail} alt={item.title} />
+            <img src={item.thumbnail} alt={item.title} onClick={() => {
+              openYoutubePlayer(item.videoId)
+
+            }} />
             <ImageListItemBar
               title={item.title}
               subtitle={<span>{item.descriptionSnippet}</span>}
               actionIcon={
                 <IconButton aria-label={`info about ${item.title}`} className={classes.icon}
                   onClick={() => {
-                    openYoutubePlayer(item.videoId)
-                    // router.push(`/youtube?videoId=${item.videoId}`)
+                    router.push(`/youtube?videoId=${item.videoId}`)
                   }}
                 >
                   <InfoIcon />
