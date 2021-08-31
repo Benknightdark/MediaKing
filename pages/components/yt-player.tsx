@@ -71,21 +71,21 @@ export default function YoutubePlayerProvider({
                         opts={opts}
                         onError={(event) => { }}
                         onPause={(event) => {
-                            setVideoList((prevState) => ({
-                                ...prevState,
-                                [id]: event.target.getCurrentTime()
-                            }))
+                            // setVideoList((prevState) => ({
+                            //     ...prevState,
+                            //     [id]: event.target.getCurrentTime()
+                            // }))
                         }}
                         onPlay={(event) => { }}
                         onReady={(event) => { }}
                         onStateChange={(event) => {
-                            // 判斷影片是否播放完畢，如果已播放完畢，則將該影片的開始時間設為0
-                            if (event.data === 0) {
-                                setVideoList((prevState) => ({
-                                    ...prevState,
-                                    [id]: 0
-                                }))
-                            }
+                            // // 判斷影片是否播放完畢，如果已播放完畢，則將該影片的開始時間設為0
+                            // if (event.data === 0) {
+                            //     setVideoList((prevState) => ({
+                            //         ...prevState,
+                            //         [id]: 0
+                            //     }))
+                            // }
                         }}
                         onPlaybackRateChange={(event) => { }}
                     />
