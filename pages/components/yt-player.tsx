@@ -33,12 +33,13 @@ export default function YoutubePlayerProvider({
     const [opts, setOpts] = useState<Options>({ });
 
     const show = (text: string) => {
+        console.log(videoList[text])
         setId(text);
         setOpts({
             playerVars: {
                 autoplay: 1 as const,
-                origin: '*',
-                start: Number.parseInt(videoList[text])
+                origin: window.location.origin,
+                start:videoList[text]===undefined?0: Number.parseInt(videoList[text])
             },
         })
         setTimeout(() => {
@@ -71,21 +72,22 @@ export default function YoutubePlayerProvider({
                         opts={opts}
                         onError={(event) => { }}
                         onPause={(event) => {
-                            // setVideoList((prevState) => ({
-                            //     ...prevState,
-                            //     [id]: event.target.getCurrentTime()
-                            // }))
+                            setVideoList((prevState) => ({
+                                ...prevState,
+                                [id]: event.target.getCurrentTime()
+                            }))
                         }}
                         onPlay={(event) => { }}
                         onReady={(event) => { }}
                         onStateChange={(event) => {
-                            // // 判斷影片是否播放完畢，如果已播放完畢，則將該影片的開始時間設為0
-                            // if (event.data === 0) {
-                            //     setVideoList((prevState) => ({
-                            //         ...prevState,
-                            //         [id]: 0
-                            //     }))
-                            // }
+                            console.log(event.data)
+                            // 判斷影片是否播放完畢，如果已播放完畢，則將該影片的開始時間設為0
+                            if (event.data === 0) {
+                                setVideoList((prevState) => ({
+                                    ...prevState,
+                                    [id]: 0
+                                }))
+                            }
                         }}
                         onPlaybackRateChange={(event) => { }}
                     />

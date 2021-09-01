@@ -39,7 +39,7 @@
     "node-fetch": "^2.6.1",
     "node-notifier": "^10.0.0",
     "notistack": "^1.0.10",
-    "react-youtube": "^7.13.1",
+    "react-youtube": "^7.14.0-canary.1",
     "use-debounce": "^7.0.0",
     "uuid": "^8.3.2"
   },

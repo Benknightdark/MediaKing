@@ -52,6 +52,7 @@ async function getYoutubeHotData() {
   const res = await req.text();
   const regex = /var ytInitialData = (.+);<\/script>/gm
   const m = regex.exec(res)
+  console.log(JSON.parse(m[1].split(';</script>')[0]))
   return JSON.parse(m[1].split(';</script>')[0])['contents']['twoColumnBrowseResultsRenderer']['tabs'][0]['tabRenderer']['content']['sectionListRenderer']['contents'][1]['itemSectionRenderer']['contents'][0]['shelfRenderer']['content']['expandedShelfContentsRenderer']['items'].map(b => b.videoRenderer)
     .map(c => {
       return {
