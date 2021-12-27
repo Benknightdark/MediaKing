@@ -69,10 +69,10 @@ export default function Youtube() {
       setProgress(0);
       nWindow.electron.ytInfoFromClient.send(url);
     }
-    const handleYTInfoFromServer = (event, dataFromServer) => {
+    const handleYTInfoFromServer = (event: any, dataFromServer: any) => {
       setData(dataFromServer);
     };
-    const handleYTDownloadFromServer = (event, progress, videoLength) => {
+    const handleYTDownloadFromServer = (event: any, progress: { percent: React.SetStateAction<number> | undefined; timemark: any; }, videoLength: number) => {
       if (progress.percent !== undefined) {
         setProgress(progress.percent);
       } else {
@@ -238,7 +238,7 @@ export default function Youtube() {
                   <Paper className={classes.paper}>
                     <List className={classes.root}>
                       {
-                        data?.streamingData?.adaptiveFormats.map(a => {
+                        data?.streamingData?.adaptiveFormats.map((a: { itag: React.Key | null | undefined; qualityLabel: string | undefined; quality: any; mimeType: string | string[]; url: any; }) => {
                           return (<div>
                             <ListItem alignItems="center" key={a.itag}>
                               <ListItemText

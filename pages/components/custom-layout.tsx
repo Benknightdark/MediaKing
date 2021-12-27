@@ -17,6 +17,7 @@ import { Hidden, IconButton, useTheme } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import MovieIcon from "@material-ui/icons/Movie";
 import YoutubePlayerProvider from "./yt-player";
+import { NextPage } from "next";
 const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const MenuList = (classes) => {
+const MenuList = (classes: any) => {
   const router = useRouter();
   return (
     <div>
@@ -84,13 +85,25 @@ const MenuList = (classes) => {
             </ListItemIcon>
             <ListItemText primary="音樂轉檔" />
           </ListItem>
+          <ListItem
+            button
+            key="audio"
+            onClick={() => {
+              router.push("/audio");
+            }}
+          >
+            <ListItemIcon>
+              <MovieIcon />
+            </ListItemIcon>
+            <ListItemText primary="圖片管理" />
+          </ListItem>
         </List>
         <Divider />
       </div>
     </div>
   );
 };
-export default function CustomLayout({ children }) {
+const CustomLayout: NextPage = ({ children }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -165,3 +178,6 @@ export default function CustomLayout({ children }) {
     </YoutubePlayerProvider>
   );
 }
+
+export default CustomLayout;
+

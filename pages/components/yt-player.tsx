@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 export default function YoutubePlayerProvider({
     children,
-}) {
+}:any) {
     const [open, setOpen] = useState<boolean>(false);
     const [id, setId] = useState<string>("");
     const classes = useStyles();
@@ -33,13 +33,12 @@ export default function YoutubePlayerProvider({
     const [opts, setOpts] = useState<Options>({ });
 
     const show = (text: string) => {
-        console.log(videoList[text])
         setId(text);
         setOpts({
             playerVars: {
                 autoplay: 1 as const,
                 origin: window.location.origin,
-                start:videoList[text]===undefined?0: Number.parseInt(videoList[text])
+                start:(videoList as any)[text]===undefined?0: Number.parseInt((videoList as any)[text])
             },
         })
         setTimeout(() => {
@@ -49,7 +48,7 @@ export default function YoutubePlayerProvider({
 
     const handleClose = () => {
         try {
-            document.getElementsByTagName('iframe')[0].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
+            (document as any).getElementsByTagName('iframe')[0].contentWindow.postMessage('{"event":"command","func":"' + 'pauseVideo' + '","args":""}', '*');
             setTimeout(() => {
                 setOpen(false);
             }, 500);

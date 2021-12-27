@@ -36,7 +36,7 @@ export default function Home() {
 
   const getData = () => {
     nWindow.electron.ytHotFromClient.send();
-    const handleYTHotFromServer = (event, dataFromServer) => {
+    const handleYTHotFromServer = (event: any, dataFromServer: React.SetStateAction<never[]>) => {
       console.log(dataFromServer)
       setData(dataFromServer)
       nWindow.electron.ytHotFromClient.off();
@@ -53,7 +53,7 @@ export default function Home() {
   return (
     data.length > 0 && <div className={classes.root}>
       <ImageList>
-        {data.map((item) => (
+        {data.map((item:any) => (
           <ImageListItem key={item.thumbnail}>
             <img src={item.thumbnail} alt={item.title} onClick={() => {
               openYoutubePlayer(item.videoId)

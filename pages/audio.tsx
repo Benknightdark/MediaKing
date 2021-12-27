@@ -40,9 +40,9 @@ export default function Audio() {
   const router = useRouter()
 
   const nWindow = global.window as any;
-  const initArray = [];
+  const initArray:any[] = [];
   const [files, setFiles] = useState(initArray);
-  const handleChange = (file) => {
+  const handleChange = (file: any[]) => {
     setFiles(
       file.map((a) => {
         return { name: a.name, path: a.path, status: "" };
@@ -52,7 +52,7 @@ export default function Audio() {
   };
 
   useEffect(() => {
-    const handleAudioConvertFromServer = async (event, data) => {
+    const handleAudioConvertFromServer = async (event: any, data: { path: any; }) => {
       let newFiles = files.filter((a) => a.path != data.path);
       console.log(newFiles);
       newFiles = [data,...newFiles];
